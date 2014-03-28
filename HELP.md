@@ -72,62 +72,82 @@ This is a menu for working with Pi Camera. Let's start with 1-picture entry and 
 (10) Because 1-picture is unique in the tree list, we can use addItem() again to add ' settings'. To add 'set folder' and 'set exposure' to 'settings' we can add them using addItem() because 'settings' so far is unique, but to maintain homogeneity we decided to use the methodology explained above. The rest of items can be added in the same way as '1-picture' and its items.
 
 (14)   menu.addItem(menu.ROOT, 'time lapsed')
+
 (15)   menu.addItem('time lapsed', 'start')
+
 (16)   menu.addItem('time lapsed', 'stop')
+
 (17)   menu.addItem('time lapsed', 'status')
+
 (18)   menu.addItem('time lapsed', 'list')
+
 (19)   menu.find('list', 'time lapsed')
+
 (20)   menu.addItem2Current('scan')
+
 (21)   menu.addItem2Current('share')
+
 (22)   menu.addItem2Current('pictures')
+
 (23)   menu.addItem2Current('erase all')
+
 (24)   menu.addItem('time lapsed','settings')
+
 (25)   menu.find('settings', 'time lapsed')
+
 (26)   menu.addItem2Current('set folder')
+
 (27)   menu.addItem2Current('set exposure')
+
 (28)   menu.addItem2Current('set interval')
   
 (29)   menu.addItem(menu.ROOT, 'system')
+
 (30)   menu.addItem('system','date&time')
+
 (31)   menu.addItem('system','reboot')
+
 (32)   menu.addItem('system','poweroff')
+
 (33)   menu.addItem('system','exit    ') 
 
-addItem() and addItem2Current() methods accept three arguments (parent item, child item, *commad). Parent is a string describing the parent in which we need to add child items described as string. command is the pointer of a python function that we can create to give the child a behavior. Command argument is optional so If we don't pass this argument, addItem() interprets the child is going to be a label or a future parent.
+
+addItem() and addItem2Current() methods accept three arguments (parent item, child item, *commad). Parent is a string describing the parent in which we need to add child items described as string. command is the pointer of a python function that we can create to give the child a behavior. Command argument is optional so If we don't pass this argumen, addItem() interprets the child is going to be a label or a future parent.
 
 Any item with ++ prefix (listed above) indicates it has child items. Any item with @ prefix indicates it is a label which not contain a command associated.
 
 (33) menu.printList(), will output
 
 Root
-  ++1-picture (current)
-   @shoot
-   ++list
-    @scan
-    @share
-    @pictures
-    @erase all
-   ++settings
-    @set folder
-    @set exposure
-  ++time lapsed
-   @start
-   @stop
-   @status
-   ++list
-    @scan
-    @share
-    @pictures
-    @erase all
-   ++settings
-    @set folder
-    @set exposure
-    @set interval
-  ++system
-   @date&time
-   @reboot
-   @poweroff
-   @exit
+
+            ++1-picture (current)
+               @shoot
+               ++list
+                  @scan
+                  @share
+                  @pictures
+                  @erase all
+               ++settings
+                  @set folder
+                  @set exposure
+            ++time lapsed
+               @start
+               @stop
+               @status
+               ++list
+                  @scan
+                  @share
+                  @pictures
+                  @erase all
+               ++settings
+                  @set folder
+                  @set exposure
+                  @set interval
+            ++system
+               @date&time
+               @reboot
+               @poweroff
+               @exit
 
 The nomenclature, in the figure of prefixes (++) and (@), will indicate visually if items are parents or labels, these last ones can be seen as leaves of the tree. Additionally a (current) tag is printed referring the current active element. Till this far, the list is a simple list of multiple level of items.
 
@@ -137,45 +157,45 @@ Lets create our first python code for creating this menu.
 import treeList
 
 def menuInit(menu):
-   menu.addItem(menu.ROOT, '1-picture')
-   menu.addItem('1-picture','shoot')
-   menu.addItem('1-picture','list')
-   menu.find('list', '1-picture')
-   menu.addItem2Current('scan')
-   menu.addItem2Current('share')
-   menu.addItem2Current('pictures')
-   menu.addItem2Current('erase all')
-   menu.addItem('1-picture','settings')
-   menu.find('settings', '1-picture')
-   menu.addItem2Current('set folder')
-   menu.addItem2Current('set exposure')
 
-   menu.addItem(menu.ROOT, 'time lapsed')
-   menu.addItem('time lapsed', 'start')
-   menu.addItem('time lapsed', 'stop')
-   menu.addItem('time lapsed', 'status')
-   menu.addItem('time lapsed', 'list')
-   menu.find('list', 'time lapsed')
-   menu.addItem2Current('scan')
-   menu.addItem2Current('share')
-   menu.addItem2Current('pictures')
-   menu.addItem2Current('erase all')
-   menu.addItem('time lapsed','settings')
-   menu.find('settings', 'time lapsed')
-   menu.addItem2Current('set folder')
-   menu.addItem2Current('set exposure')
-   menu.addItem2Current('set interval')
-  
-   menu.addItem(menu.ROOT, 'system')
-   menu.addItem('system','date&time')
-   menu.addItem('system','reboot')
-   menu.addItem('system','poweroff')
-   menu.addItem('system','exit    ')
+            menu.addItem(menu.ROOT, '1-picture')
+            menu.addItem('1-picture','shoot')
+            menu.addItem('1-picture','list')
+            menu.find('list', '1-picture')
+            menu.addItem2Current('scan')
+            menu.addItem2Current('share')
+            menu.addItem2Current('pictures')
+            menu.addItem2Current('erase all')
+            menu.addItem('1-picture','settings')
+            menu.find('settings', '1-picture')
+            menu.addItem2Current('set folder')
+            menu.addItem2Current('set exposure')
+            menu.addItem(menu.ROOT, 'time lapsed')
+            menu.addItem('time lapsed', 'start')
+            menu.addItem('time lapsed', 'stop')
+            menu.addItem('time lapsed', 'status')
+            menu.addItem('time lapsed', 'list')
+            menu.find('list', 'time lapsed')
+            menu.addItem2Current('scan')
+            menu.addItem2Current('share')
+            menu.addItem2Current('pictures')
+            menu.addItem2Current('erase all')
+            menu.addItem('time lapsed','settings')
+            menu.find('settings', 'time lapsed')
+            menu.addItem2Current('set folder')
+            menu.addItem2Current('set exposure')
+            menu.addItem2Current('set interval')
+            menu.addItem(menu.ROOT, 'system')
+            menu.addItem('system','date&time')
+            menu.addItem('system','reboot')
+            menu.addItem('system','poweroff')
+            menu.addItem('system','exit    ')
 
 if __name__ == '__main__':
-   menu = treeList()
-   initMenu()
-   menu.printList()
+
+            menu = treeList()
+            initMenu()
+            menu.printList()
 
 ------------------------
 At this point we can use this list only for showing it using printList() method or for using it with another library that we have created to use this tree list as a menu using the Adafruit CharPlate LCD for Raspberry Pi. The use of this LCD display can be easier if we can use a hierarchical list for showing information using the navigation buttons the LCD Display comes with.
