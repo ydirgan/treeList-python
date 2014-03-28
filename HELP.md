@@ -1,6 +1,6 @@
 What is a TreeList?. A treelist is a special kind of list which can manage unlimited levels of nested lists in an organized way, useful for creating hierarchical structures that can be maintained and navigated using some simple methods. This library was originally design as a menu enabler, but can be used for any other purpose.
 
-Creating a empty list:
+Creating a empty list: 
 
 (1)   menu = treelist()
 
@@ -178,9 +178,9 @@ When we create a list and add items to it, the first level is activated by defau
 
 The output of this two lines of code is
 
-1-picture
-time lapsed
-system
+            1-picture
+            time lapsed
+            system
 
 We can navigate for these active list using several variants. For example, to get the same output of previous code we can do the following.
 
