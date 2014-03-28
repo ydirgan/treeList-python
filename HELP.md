@@ -9,16 +9,27 @@ When we create this list, it is actually not really empty. What we do is create 
 In this example we will be creating a menu as illustration. The following list depicts what we want to achieve.
 
 Root --
+
    | ++1-picture (current)
+
             | @shoot
+
             | ++list
+
                    | @scan
+
                    | @share
+
                    | @pictures
+
                    | @erase all
+
                    | ++settings
+
                          | @set folder
+
                          | @set exposure
+
               | ++time lapsed
                    | @start
                    | @stop
