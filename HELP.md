@@ -42,16 +42,27 @@ Root --
 This is a menu for working with Pi Camera. Let's start with 1-picture entry and its items.
 
 (2)   menu.addItem(menu.ROOT, '1-picture')
+
 (3)   menu.addItem('1-picture','shoot')
+
 (4)   menu.addItem('1-picture','list')
+
 (5)   menu.find('list', '1-picture')
+
 (6)   menu.addItem2Current('scan')
+
 (7)   menu.addItem2Current('share')
+
 (8)   menu.addItem2Current('pictures')
+
 (9)   menu.addItem2Current('erase all')
+
 (10)   menu.addItem('1-picture','settings')
+
 (11)   menu.find('settings', '1-picture')
+
 (12)   menu.addItem2Current('set folder')
+
 (13)   menu.addItem2Current('set exposure')
 
 (2) add an item to the Root element, which in this case is the first element created in the list using the constructor of the class treeList. addItem() is a method that add an item to the element indicated in the first argument, called parent. if the parent doesn't exists the method don't do anything. If parent exists it creates the element, called child, as an item of the parent. We can add as many items as we need to create a hierarchical structure in several layers.
