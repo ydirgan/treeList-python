@@ -11,25 +11,15 @@ In this example we will be creating a menu as illustration. The following list d
 Root --
 
    | ++1-picture (current)
-
             | @shoot
-
             | ++list
-
                    | @scan
-
                    | @share
-
                    | @pictures
-
                    | @erase all
-
                    | ++settings
-
                          | @set folder
-
                          | @set exposure
-
               | ++time lapsed
                    | @start
                    | @stop
