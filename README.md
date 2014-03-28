@@ -3,11 +3,8 @@ Dirgan's Tree List Python Code Library
   This class is intendend for creating and manipulating special kind of list
   in the form of tree list, useful for creating nested lists.
  
-  In progress!
-
- 
   To download, we suggest use:
-  git clone https://github.com/ydirgan/treeList.git
+  https://github.com/ydirgan/treeList-python.git
  
  
 ============
