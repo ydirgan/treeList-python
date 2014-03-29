@@ -246,3 +246,52 @@ We can use goItemName() and goItemIndex() to move the active item using its name
             Label:    settings    Index:  4    Relative Position: 5/5
 
 (57) finds 'list' of 'time lapsed' to go down one level so we can go through each item using the index of the "for" loop.
+
+ASSIGNING A COMMAND TO A ITEM
+
+We can give a item a behavior assigning a command to that item. addItem() or AddItem2Current() methods give us a way to do it adding the name of the function as a parameter. Let's see another list in which we assign some behavior.
+
+    (58) from treeList import treeList
+    (59) import datetime
+    (58) import os
+    (58) from time import sleep
+
+
+    (58) def reboot():
+    (58)    print "\nrebooting..."
+    (58)    os.system('reboot')
+
+
+    (58) def powerOff():
+    (58)    print "\npowering off..."
+    (58)    os.system('poweroff')
+   
+
+    (58) def updateDateTime(menu):
+    (58)    date=datetime.datetime.now().strftime("%y/%m/%d")
+    (58)    time=datetime.datetime.now().strftime("%H:%M:%S")
+    (58)    uname=os.uname()
+    (58)    menu.removeAllSubItemsOfEntry('date&time')
+    (58)    menu.addItem('date&time','date') 
+    (58)    menu.addItem('date',date) 
+    (58)    menu.addItem('date&time','time') 
+    (58)    menu.addItem('time',time) 
+
+
+    (58) def menuInit(menu):
+    (58)    menu.addItem(menu.ROOT, 'system')
+    (58)    menu.addItem('system','date&time')
+    (58)    menu.addItem('system','reboot', reboot)
+    (58)    menu.addItem('system','poweroff', powerOff)
+    (58)    menu.goTop()
+    (58)    updateDateTime(menu)
+
+
+    (58) if __name__ == '__main__':
+    (58)    menu = treeList()
+    (58)    menuInit(menu)
+     
+    (58)    while True:
+    (58)       updateDateTime(menu)
+    (58)       menu.printList()
+    (58)       sleep(1)
