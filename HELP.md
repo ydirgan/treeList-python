@@ -4,7 +4,7 @@ Creating a empty list:
 
 (1)   menu = treelist()
 
-When we create this list, it is actually not really empty. What we do is create the base structure of the list that contains one element called 'Root' that is referenced as ROOT constant. This first list created has only one element.
+When we create this list, it is actually not really empty. What we do is creates the base structure of the list that contains one element called 'Root' that is referenced as ROOT constant. This first list created has only one element.
 
 In this example we will be creating a menu as illustration. The following list depicts what we want to achieve.
 
@@ -116,51 +116,52 @@ Any item with ++ prefix (listed above) indicates it has child items. Any item wi
                @poweroff
                @exit
 
-The nomenclature, in the figure of prefixes (++) and (@), will indicate visually if items are parents or labels, these last ones can be seen as leaves of the tree. Additionally a (current) tag is printed referring the current active element. Till this far, the list is a simple list of multiple level of items.
+The nomenclature, in the figure of prefixes (++) and (@), indicates visually if items are parents or labels, these last ones can be seen as leaves of the tree. Additionally a (current) tag is printed referring the current active element. Till this far, the list is a simple list of multiple level of items.
 
-Lets create our first python code for creating this menu.
+Lets create our first python code for creating this list.
 
             #menu.py
             import treeList
-            def menuInit(menu):
-                        menu.addItem(menu.ROOT, '1-picture')
-                        menu.addItem('1-picture','shoot')
-                        menu.addItem('1-picture','list')
-                        menu.find('list', '1-picture')
-                        menu.addItem2Current('scan')
-                        menu.addItem2Current('share')
-                        menu.addItem2Current('pictures')
-                        menu.addItem2Current('erase all')
-                        menu.addItem('1-picture','settings')
-                        menu.find('settings', '1-picture')
-                        menu.addItem2Current('set folder')
-                        menu.addItem2Current('set exposure')
-                        menu.addItem(menu.ROOT, 'time lapsed')
-                        menu.addItem('time lapsed', 'start')
-                        menu.addItem('time lapsed', 'stop')
-                        menu.addItem('time lapsed', 'status')
-                        menu.addItem('time lapsed', 'list')
-                        menu.find('list', 'time lapsed')
-                        menu.addItem2Current('scan')
-                        menu.addItem2Current('share')
-                        menu.addItem2Current('pictures')
-                        menu.addItem2Current('erase all')
-                        menu.addItem('time lapsed','settings')
-                        menu.find('settings', 'time lapsed')
-                        menu.addItem2Current('set folder')
-                        menu.addItem2Current('set exposure')
-                        menu.addItem2Current('set interval')
-                        menu.addItem(menu.ROOT, 'system')
-                        menu.addItem('system','date&time')
-                        menu.addItem('system','reboot')
-                        menu.addItem('system','poweroff')
-                        menu.addItem('system','exit    ')
+            def initMenu(menu):
+               menu.addItem(menu.ROOT, '1-picture')
+               menu.addItem('1-picture','shoot')
+               menu.addItem('1-picture','list')
+               menu.find('list', '1-picture')
+               menu.addItem2Current('scan')
+               menu.addItem2Current('share')
+               menu.addItem2Current('pictures')
+               menu.addItem2Current('erase all')
+               menu.addItem('1-picture','settings')
+               menu.find('settings', '1-picture')
+               menu.addItem2Current('set folder')
+               menu.addItem2Current('set exposure')
+               menu.addItem(menu.ROOT, 'time lapsed')
+               menu.addItem('time lapsed', 'start')
+               menu.addItem('time lapsed', 'stop')
+               menu.addItem('time lapsed', 'status')
+               menu.addItem('time lapsed', 'list')
+               menu.find('list', 'time lapsed')
+               menu.addItem2Current('scan')
+               menu.addItem2Current('share')
+               menu.addItem2Current('pictures')
+               menu.addItem2Current('erase all')
+               menu.addItem('time lapsed','settings')
+               menu.find('settings', 'time lapsed')
+               menu.addItem2Current('set folder')
+               menu.addItem2Current('set exposure')
+               menu.addItem2Current('set interval')
+               menu.addItem(menu.ROOT, 'system')
+               menu.addItem('system','date&time')
+               menu.addItem('system','reboot')
+               menu.addItem('system','poweroff')
+               menu.addItem('system','exit    ')
+               menu.goTop()
 
             if __name__ == '__main__':
 
-                        menu = treeList()
-                        initMenu()
-                        menu.printList()
+               menu = treeList()
+               initMenu()
+               menu.printList()
 
 ------------------------
 At this point we can use this list only for showing it using printList() method or for using it with another library that we have created to use this tree list as a menu using the Adafruit CharPlate LCD for Raspberry Pi. The use of this LCD display can be easier if we can use a hierarchical list for showing information using the navigation buttons the LCD Display comes with.
@@ -171,65 +172,65 @@ NAVIGATION METHODS
 
 Tree list consists on levels, where the main one is ROOT. When we add the first item to ROOT, addItem() creates the first level that becomes the active level. We can activate a level using goDown() or goUp() methods to step down or step up through the list. When a level is activated, we can go over each item of the activated level using goNext(), goPrev(), goFirst() and goLast() methods. Additionally, itemsOfCurrentList() method can give us the labels of the activated list.
 
-When we create a list and add items to it, the first level is activated by default. So, the next lines of code shows how to navigate the first level. Assumes that we just created aour list using initMenu(), then show each entry label of the first level.
+When we create a list and add items to it, the first level is activated by default. So, the next lines of code shows how to navigate the first level. Assumes that we just created our list using the function previosly creted initMenu(), then show each entry label of the first level.
 
-            (34)   for label in menu.itemsOfCurrentList():
-            (35)      print label
+    (34)   for label in menu.itemsOfCurrentList():
+    (35)      print label
 
 The output of this two lines of code is
 
-            1-picture
-            time lapsed
-            system
+    1-picture
+    time lapsed
+    system
 
 We can navigate for these active list using several variants. For example, to get the same output of previous code we can do the following.
 
-            (36)   menu.goFirst()
-            (37)   for item in range(menu.numberOfItems()):
-            (38)      print menu.activeLabel()
-            (39)      menu.goNext()
+    (36)   menu.goFirst()
+    (37)   for item in range(menu.numberOfItems()):
+    (38)      print menu.activeLabel()
+    (39)      menu.goNext()
 
-(37) iterates over a range from 0 to menu.numberOfItems() which return the number of entries of the active list. goFirst() and goNext() activates the item where it goes, so we can use a set of methods that can give us information about the active item. That is the case of activeLabel() and some other methods like activeIndex() and activePosition().
+(37) iterates over a range from 0 to menu.numberOfItems() which returns the number of entries of the active list. goFirst() and goNext() activates the item where it goes, so we can use a set of methods that can give us information about the active item. That is the case of activeLabel() and some other methods like activeIndex() and activePosition().
 
-            (40)   menu.goFirst()
-            (41)   for item in range(menu.numberOfItems()):
-            (42)      print 'Label:%s, Index: %d, Relative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
-            (43)      menu.goNext()
-
-
-            output:
-            Label:   1-picture    Index:  0    Relative Position: 1/3
-            Label: time lapsed    Index:  1    Relative Position: 2/3
-            Label:      system    Index:  2    Relative Position: 3/3
-
-Another two methods are specially useful for navigation purposes. savePosition() and restorePosition() that can give an extra control over our movement. Let's down over the list first to show how to use it. Let's down to 'set exposure' of '1-picture' using goDown() method.
-
-            (44)   menu.goTop()
-            (45)   menu.savePosition()
-            (46)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
-            (47)   menu.goDown()
-            (48)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
-            (49)   menu.goItemName('settings')
-            (50)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
-            (51)   menu.goDown()
-            (52)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
-            (53)   menu.goLast()
-            (54)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
-            (55)   menu.restorePosition()
-            (56)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (40)   menu.goFirst()
+    (41)   for item in range(menu.numberOfItems()):
+    (42)      print 'Label:%s, Index: %d, Relative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (43)      menu.goNext()
 
 
-            output:
-            Label:       1-picture    Index:  0    Relative Position: 1/3
-            Label:             shoot    Index:  0    Relative Position: 1/3
-            Label:         settings    Index:  2    Relative Position: 3/3
-            Label:      set folder    Index:  0    Relative Position: 1/2
-            Label: set exposure    Index:  1    Relative Position: 2/2
-            Label:       1-picture    Index:  0    Relative Position: 1/3
+    output:
+    Label:   1-picture    Index:  0    Relative Position: 1/3
+    Label: time lapsed    Index:  1    Relative Position: 2/3
+    Label:      system    Index:  2    Relative Position: 3/3
 
-(44) goes to the top of the list that is the first item of the first level which is  '1-picture' then (45) save that position. (47) down one level and set 'shoot' as the active item. With goItemName() method at (49) we can move in the active level looking for a item called 'settings' and set it active. (51) down one step and set 'set folder' as active. In that level we can go to the last item using goLast() method. (55) restores the position saved in (45) that was '1-picture'.
+Another two methods are specially useful for navigation purposes. savePosition() and restorePosition() that can give an extra control over our movement. Let's down over the list first to show how to use it. Let's down to 'set exposure' of '1-picture' using the navigation tool goDown() method.
 
-We can use goItemName() and goItemIndex() to move the active item using its name or index. For example, we can go through subtiems of list that pertains to 'time lapsed' with:
+    (44)   menu.goTop()
+    (45)   menu.savePosition()
+    (46)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (47)   menu.goDown()
+    (48)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (49)   menu.goItemName('settings')
+    (50)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (51)   menu.goDown()
+    (52)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (53)   menu.goLast()
+    (54)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+    (55)   menu.restorePosition()
+    (56)   print 'Label:%12s\tIndex: %2d\tRelative Position: %s'%(menu.activeLabel(), menu.activeIndex(), menu.activePosition())
+
+
+    output:
+    Label:       1-picture    Index:  0    Relative Position: 1/3
+    Label:           shoot    Index:  0    Relative Position: 1/3
+    Label:        settings    Index:  2    Relative Position: 3/3
+    Label:      set folder    Index:  0    Relative Position: 1/2
+    Label:    set exposure    Index:  1    Relative Position: 2/2
+    Label:       1-picture    Index:  0    Relative Position: 1/3
+
+(44) goes to the top of the list that is the first item of the first level which is  '1-picture' then (45) save that position. (47) down one level and set 'shoot', which is the first item of that list, as the active item. With goItemName() method at (49) we can move in the active level looking for a item called 'settings' and set it active. (51) down one step and set 'set folder' as active. In that level we can go to the last item using goLast() method. (55) restores the position saved in (45) that was '1-picture'.
+
+We can use goItemName() and goItemIndex() to move the active item using its name or index in the active list. For example, we can go through subtiems of list that pertains to 'time lapsed' with:
 
             (57)   menu.find('list','time lapsed')  
             (58)   for index in range(menu.numberOfItems()):
@@ -244,4 +245,4 @@ We can use goItemName() and goItemIndex() to move the active item using its name
             Label:        list    Index:  3    Relative Position: 4/5
             Label:    settings    Index:  4    Relative Position: 5/5
 
-(57) finds 'list' of 'time lapsed' to go down one level so we can go through each item using the index of the for loop.
+(57) finds 'list' of 'time lapsed' to go down one level so we can go through each item using the index of the "for" loop.
