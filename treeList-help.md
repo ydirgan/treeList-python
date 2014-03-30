@@ -253,45 +253,58 @@ We can give a item a behavior assigning a command to that item. addItem() or Add
 
     (58) from treeList import treeList
     (59) import datetime
-    (58) import os
-    (58) from time import sleep
+    (60) import os
+    (61) from time import sleep
 
 
-    (58) def reboot():
-    (58)    print "\nrebooting..."
-    (58)    os.system('reboot')
+    (62) def reboot():
+    (63)    print "\nrebooting..."
+    (64)    os.system('reboot')
 
 
-    (58) def powerOff():
-    (58)    print "\npowering off..."
-    (58)    os.system('poweroff')
+    (65) def powerOff():
+    (66)    print "\npowering off..."
+    (67)    os.system('poweroff')
    
 
-    (58) def updateDateTime(menu):
-    (58)    date=datetime.datetime.now().strftime("%y/%m/%d")
-    (58)    time=datetime.datetime.now().strftime("%H:%M:%S")
-    (58)    uname=os.uname()
-    (58)    menu.removeAllSubItemsOfEntry('date&time')
-    (58)    menu.addItem('date&time','date') 
-    (58)    menu.addItem('date',date) 
-    (58)    menu.addItem('date&time','time') 
-    (58)    menu.addItem('time',time) 
+    (68) def updateDateTime(menu):
+    (69)    date=datetime.datetime.now().strftime("%y/%m/%d")
+    (70)    time=datetime.datetime.now().strftime("%H:%M:%S")
+    (71)    uname=os.uname()
+    (72)    menu.removeAllSubItemsOfEntry('date&time')
+    (73)    menu.addItem('date&time','date') 
+    (74)    menu.addItem('date',date) 
+    (75)    menu.addItem('date&time','time') 
+    (76)    menu.addItem('time',time) 
 
 
-    (58) def menuInit(menu):
-    (58)    menu.addItem(menu.ROOT, 'system')
-    (58)    menu.addItem('system','date&time')
-    (58)    menu.addItem('system','reboot', reboot)
-    (58)    menu.addItem('system','poweroff', powerOff)
-    (58)    menu.goTop()
-    (58)    updateDateTime(menu)
+    (77) def menuInit(menu):
+    (78)    menu.addItem(menu.ROOT, 'system')
+    (79)    menu.addItem('system','date&time')
+    (80)    menu.addItem('system','reboot', reboot)
+    (81)    menu.addItem('system','poweroff', powerOff)
+    (82)    menu.goTop()
+    (83)    updateDateTime(menu)
 
 
-    (58) if __name__ == '__main__':
-    (58)    menu = treeList()
-    (58)    menuInit(menu)
+    (84) if __name__ == '__main__':
+    (85)    menu = treeList()
+    (86)    menuInit(menu)
      
-    (58)    while True:
-    (58)       updateDateTime(menu)
-    (58)       menu.printList()
-    (58)       sleep(1)
+    (87)    while True:
+    (88)       updateDateTime(menu)
+    (89)       menu.printList()
+    (90)       sleep(1)
+
+(85) define a treeList as menu, then menuInit() add items to the list.(83) calls updateDateTime() that use removeAllSubItemsOfEntry() method to remove all items below 'date&time' entry. This way we can maintain lists of labels below a item for giving information. in this case we are adding 'date' label and 'time' label to 'date&time' entry. We use datetime to add the current time and current date to time and date entries.
+
+(87) enters to a infinite while loop for showing the tree list using printList(), also we update 'date&time' item using updateDateTime() method every second.
+
+Notice that (80) and (81) adds items reboot and poweroff and the third parameters is a function defines at (62) and (65) lineas. If this list is used in a menu context, and we need to reboot the server, we can use activeAction() method after go and set active the entry 'reboot'. 
+
+    (91) menu.find('reboot')
+    (92) menu.activeAction()()
+    
+menu.find looks for a item called 'reboot' and set it active. menu.activeAction() methods returns the command that is executed in (92). 
+
+TreeList was originally designed for working with Adafruit CharPlate Display 16x2, so it nature is serial by default duw to the fact that a user go through a menu down and up and then select an option and execute it.
