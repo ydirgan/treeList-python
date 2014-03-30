@@ -1,6 +1,6 @@
 Dirgan's menu LCD Python Code Library
 ============
-  This class is intendend for use the ADAFRUIT CHARPLATE LCD DISPLAY 16x2 as a menu. It uses treeList lib for create complex menues.
+  This class is intendend for the use of the Adafruit CHARPLATE LCD DISPLAY 16x2 installed on a Raspberry pi model B, as a menu. It uses treeList class for creating complex menues and navigates through the items using left, right, up, down, and select buttons.
  
   To download, we suggest use:
   https://github.com/ydirgan/treeList-python.git
