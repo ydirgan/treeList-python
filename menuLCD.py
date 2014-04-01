@@ -187,7 +187,8 @@ class menuLCD(treeList):
 
                if btn[0] == self.lcd.SELECT:
                   if treeList.typeOfActiveItem(self) == treeList.CMD:
-                     treeList.activeAction(self)() 
+                     treeList.command(self)() 
+                     self.resetTime2Sleep()
 
             self.lcdRefresh()
 
