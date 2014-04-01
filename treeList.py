@@ -1,24 +1,29 @@
 import os
 class treeList:
 ######################################################################################
-## treelist version 1.0.0                                                           ##
-## mar-31-2014                                                                      ##
+## treelist version 1.2.0 (beta1)                                                   ##
+## Copyright Alejandro Dirgan (@ydirgan, alejandro.dirgan@gmail.com)                ##
+## mar-30-2014                                                                      ##
 ######################################################################################
    #constants no to be modified
    MLEVEL  = 0
-   MITEMS  = 1  
+   MITEMS  = 1 
    ##Aditional information can be added here ###
    MACTIVE = 2
-   NEXTFIELD = 3
+   MCOMMAND = 3
+   MVISIBLE = 4
+   NEXTFIELD = 5
    #############################################
    MLABEL  = NEXTFIELD
    MACTION = NEXTFIELD+1
    MOFFSET = NEXTFIELD+1
   
-   MAXLEVEL = 0  
-   INACTIVE=False  
+   MAXLEVEL = 0 
+   VISIBLE = True
+   INACTIVE=False 
    ROOT = 'Root'
    CMD = 'Command'
+   EMPTYCMD = ''
 
 ######################################################################################
 ## INIT class treelist                                                              ##
@@ -30,18 +35,33 @@ class treeList:
 ## [1, 2, 'File', [2, -1, 'Open', 'command'], [2, -1, 'Save', 'command']]           ##
 ######################################################################################
    def __init__(self):
-      self.menu = [0,0,self.INACTIVE,self.ROOT] #mod
-      self.CURRENTLEVEL = self.menu
-      self.CURRELEMENT = self.MOFFSET   
-      self.ACTIVEITEM = list()     
+      self.ylist = [0,0,self.INACTIVE,self.EMPTYCMD,self.VISIBLE,self.ROOT] #mod
+      self.init()
+
+
+######################################################################################
+##  This is a dummy method for demostration purposes                                ##
+######################################################################################
+   def init(self):
+      self.CURRENTLEVEL = self.ylist
+      self.CURRELEMENT = self.MOFFSET  
+      self.ACTIVEITEM = list()    
       self.CURRENTLEVELTYPE = self.ROOT
       self.trace = list()
       self.EMPTY = True;
       self.MAINCOUNT = 0
       self.INIT = False
-     
-      self.PUSHDATA=[self.CURRENTLEVEL, self.CURRELEMENT, self.ACTIVEITEM]    
 
+ 
+      self.PUSHLEVEL=list()
+      self.PUSHELEMT=list()
+      self.PUSHITEM=list()
+
+      self.depth = 0
+      self.PUSHLEVEL.append(self.CURRENTLEVEL)
+      self.PUSHELEMT.append(self.CURRELEMENT)
+      self.PUSHITEM.append(self.ACTIVEITEM)
+     
 
 ######################################################################################
 ##  This is a dummy method for demostration purposes                                ##
@@ -54,12 +74,12 @@ class treeList:
 ######################################################################################
    def goTop(self):
       self.setActiveOff()
-      self.CURRENTLEVEL = self.menu
+      self.CURRENTLEVEL = self.ylist
       self.trace = list()
       self.goItemIndex(0)
       self.setActiveOn()
-     
-           
+    
+          
 ######################################################################################
 ##  Fill dummy list using a menu as example                                         ##
 ######################################################################################
@@ -102,20 +122,17 @@ class treeList:
       else:
          cmd=command[0]
 
-      self.find2add(self.menu, parent, item, cmd)
+      self.find2add(self.ylist, parent, item, cmd)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    def find2add(self, array, parent, item, command):
-      if array[self.MLABEL] == parent:   
-         #Have a command already?
-         if array[self.MITEMS] == -1:
-            del array[-1]
-            array[self.MITEMS] = 0
-              
+      if array[self.MLABEL] == parent:  
+             
          #append item
-         if command == '':
-            array.append([array[self.MLEVEL]+1,0,self.INACTIVE,item])
+         #Additional fields can be added before field 'item'
+         if command == self.EMPTYCMD:
+            array.append([array[self.MLEVEL]+1,0,self.INACTIVE,self.EMPTYCMD,self.VISIBLE,item])
          else:
-            array.append([array[self.MLEVEL]+1,-1,self.INACTIVE,item,command])
+            array.append([array[self.MLEVEL]+1,0,self.INACTIVE,command,self.VISIBLE,item])
 
          #update maxlevel actually appended
          if array[self.MLEVEL]+1 > self.MAXLEVEL:
@@ -131,20 +148,17 @@ class treeList:
             self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
             self.setActiveOn()
 
-      else:    
+      else:   
          for entry in array[self.MOFFSET:]:
             #if found it
             if entry[self.MLABEL] == parent:
-               #Have a command already?
-               if entry[self.MITEMS] == -1:
-                  del entry[-1]
-                  entry[self.MITEMS] = 0
-              
+             
                #append item
+               #Additional fields can be added before field 'item'
                if command == '':
-                  entry.append([entry[self.MLEVEL]+1,0,self.INACTIVE,item])
+                  entry.append([entry[self.MLEVEL]+1,0,self.INACTIVE,self.EMPTYCMD,self.VISIBLE,item])
                else:
-                  entry.append([entry[self.MLEVEL]+1,-1,self.INACTIVE,item,command])
+                  entry.append([entry[self.MLEVEL]+1,0,self.INACTIVE,command,self.VISIBLE,item])
 
                if entry[self.MLEVEL]+1 > self.MAXLEVEL:
                   self.MAXLEVEL = entry[self.MLEVEL]+1
@@ -180,16 +194,12 @@ class treeList:
 
       currentItem = self.CURRENTLEVEL[self.MOFFSET+self.activeIndex()]
 
-      #Have a command already?
-      if currentItem[self.MITEMS] == -1:
-         del currentItem[-1]
-         currentItem[self.MITEMS] = 0
-              
       #append item
+      #Additional fields can be added before field 'item'
       if cmd == '':
-         currentItem.append([currentItem[self.MLEVEL]+1,0,self.INACTIVE,item])
+         currentItem.append([currentItem[self.MLEVEL]+1,0,self.INACTIVE,self.EMPTYCMD,self.VISIBLE,item])
       else:
-         currentItem.append([currentItem[self.MLEVEL]+1,-1,self.INACTIVE,item,cmd])
+         currentItem.append([currentItem[self.MLEVEL]+1,0,self.INACTIVE,cmd,self.VISIBLE,item])
 
       #update maxlevel actually appended
       if currentItem[self.MLEVEL]+1 > self.MAXLEVEL:
@@ -205,19 +215,20 @@ class treeList:
          self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
          self.setActiveOn()
  
-                           
+                          
 ######################################################################################
 ##  reset the list to have only the root. All entries and items are eliminated      ##
 ##  the result is an empty list                                                     ##
 ######################################################################################
    def emptyList(self):
       if not self.EMPTY:
-         self.CURRENTLEVEL = self.menu
+         self.CURRENTLEVEL = self.ylist
          self.goItemIndex(0)
          self.trace=list()
-         for i in range(self.numberOfItems()):
-            self.last()
-            self.deleteItem(self.activeLabel())
+         for i in reversed(range(self.numberOfItems())):
+             self.CURRENTLEVEL.remove(self.CURRENTLEVEL[self.MOFFSET+i])
+
+      self.init()
 
 ######################################################################################
 ##  remove all subitems of active entry                                             ##
@@ -245,6 +256,7 @@ class treeList:
         if self.find(entryName):
            self.removeAllSubItemsOfActiveEntry()
            self.find(entryName)
+           self.removeLastPosition()
         else:
            print '%s NOT FOUND'%entryName
            self.restorePosition()
@@ -253,16 +265,16 @@ class treeList:
 
 ######################################################################################
 ##  delete item itemName (this action remove all subitems too                       ##
-######################################################################################        
+######################################################################################       
    def deleteItem(self,itemName):
       self.goTop()
-      self.find2delete(self.menu, itemName)
+      self.find2delete(self.ylist, itemName)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    def find2delete(self, array, item):
       for entry in array[self.MOFFSET:]:
          #if found it
          if entry[self.MLABEL] == item:
-            self.count = 0    
+            self.count = 0   
             for i in array[self.MOFFSET:]:
                if i[self.MLABEL] == item:
                   break
@@ -270,12 +282,12 @@ class treeList:
             del array[self.count+3]
 
             array[self.MITEMS] -= 1
-           
+          
             if array[self.MLABEL] == self.ROOT: self.MAINCOUNT -= 1
             if self.MAINCOUNT == 0:
                self.EMPTY = True
                self.INIT = False
-           
+          
          else: #keep looking
             if entry[self.MITEMS] > 0:
                self.find2delete(entry,item)
@@ -288,16 +300,19 @@ class treeList:
       self.found = False
       self.savePosition()
       self.goTop()
-     
+    
       if parentName:
          self.find2activate(parentName[0])
          self.found=False
          self.goDown()
 
-      self.find2activate(itemName) 
+      self.find2activate(itemName)
  
       if not self.found:
          self.restorePosition()
+      else:  
+         self.removeLastPosition()
+        
       return self.found
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    def find2activate(self, item):
@@ -314,27 +329,48 @@ class treeList:
                if not self.found:
                   self.goUp()
                   self.goNext()
-            else:  
+            else: 
                if not self.found:
-                  self.goNext()   
+                  self.goNext()  
 
 ######################################################################################
 ##  Save the current position for go back purposes                                  ##
 ######################################################################################
    def savePosition(self):
-      self.PUSHDATA=[self.CURRENTLEVEL, self.CURRELEMENT, self, self.ACTIVEITEM]
+      #developing a push and pop position
+      self.depth += 1
+      self.PUSHLEVEL.append(self.CURRENTLEVEL)
+      self.PUSHELEMT.append(self.CURRELEMENT)
 
 ######################################################################################
 ##  Restore de active position saved previosly with savePosition                    ##
 ######################################################################################
    def restorePosition(self):
       self.setActiveOff()
-      self.CURRENTLEVEL = self.PUSHDATA[0]
-      self.CURRELEMENT = self.PUSHDATA[1]
-#      self.ACTIVEITEM = self.PUSHDATA[2]
+     
+      self.CURRENTLEVEL = self.PUSHLEVEL[-1]
+      self.CURRELEMENT = self.PUSHELEMT[-1]
+
+     
+      if self.depth > 0:
+         self.depth -= 1
+         del self.PUSHLEVEL[-1]
+         del self.PUSHELEMT[-1]
+     
+
       self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
       self.setActiveOn()
-     
+
+######################################################################################
+##  remove the last position stored                                                 ##
+######################################################################################
+   def removeLastPosition(self):
+    
+      if self.depth > 0:
+         self.depth -= 1
+         del self.PUSHLEVEL[-1]
+         del self.PUSHELEMT[-1]
+    
  
 ######################################################################################
 ##  Print list with their hierarquical structure                                    ##
@@ -342,25 +378,26 @@ class treeList:
    def printList(self):
       if self.EMPTY:
          print 'This list is empty'
-      else:  
-         print self.menu[self.MLABEL]       
-         self.printListRec(self.menu)
+      else: 
+         print self.ylist[self.MLABEL]      
+         self.printListRec(self.ylist)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    def printListRec(self, array):
-      if not self.EMPTY:        
+      if not self.EMPTY:       
          for entry in array[self.MOFFSET:]:
             if entry[self.MACTIVE]:
                activeLabel = ' (current)'
-            else:  
+            else: 
                activeLabel = ''
             if entry[self.MITEMS] > 0:
                print "%s++%s%s" % (' '*(entry[self.MLEVEL]+1),entry[self.MLABEL], activeLabel)
                self.printListRec(entry)
             elif entry[self.MITEMS] == 0:
-               print "%s@%s%s" % (' '*(entry[self.MLEVEL]+1),entry[self.MLABEL], activeLabel)
-            elif entry[self.MITEMS] == -1:
-               print "%s--%s%s" % (' '*(entry[self.MLEVEL]+1),entry[self.MLABEL], activeLabel)
-   
+               if entry[self.MCOMMAND] == self.EMPTYCMD:
+                  print "%s@%s%s" % (' '*(entry[self.MLEVEL]+1),entry[self.MLABEL], activeLabel)
+               else:
+                  print "%s--%s%s" % (' '*(entry[self.MLEVEL]+1),entry[self.MLABEL], activeLabel)
+  
 ######################################################################################
 ##  return active item and its attributes as string                                 ##
 ######################################################################################
@@ -382,16 +419,28 @@ class treeList:
          if self.typeOfActiveItem() == 'Label':
             returnValue='<%s>'%(self.activeLabel())
          if self.typeOfActiveItem() == 'Command':
-            returnValue='(%s)'%(self.activeLabel())  
+            returnValue='(%s)'%(self.activeLabel()) 
       return returnValue
 
 ######################################################################################
-##  returns current action of active entry                                          ##
+##  returns current action of active entry    - DEPRECATED - use command instead    ##
 ######################################################################################
    def activeAction(self):
       returnValue=''
       if not self.EMPTY and self.typeOfActiveItem() == 'Command':
-         returnValue=self.ACTIVEITEM[self.MACTION]           
+         returnValue=self.ACTIVEITEM[self.MCOMMAND]          
+      return returnValue
+
+######################################################################################
+##  returns store position of active entry                                          ##
+######################################################################################
+   def command(self):
+      returnValue=''
+      if not self.EMPTY:
+         if self.ACTIVEITEM[self.MCOMMAND] == self.EMPTYCMD:
+            returnValue=self.dummyMethod
+         else:  
+            returnValue=self.ACTIVEITEM[self.MCOMMAND]          
       return returnValue
 
 ######################################################################################
@@ -401,7 +450,7 @@ class treeList:
       returnValue=list()
       if not self.EMPTY:
          returnValue=self.CURRENTLEVEL
-      return returnValue  
+      return returnValue 
 
 ######################################################################################
 ##  returns the active entry                                                        ##
@@ -409,9 +458,9 @@ class treeList:
    def activeItem(self):
       returnValue=list()
       if not self.EMPTY:
-         self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]     
+         self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]    
          returnValue=self.ACTIVEITEM
-      return returnValue  
+      return returnValue 
 
 ######################################################################################
 ##  returns the active Label                                                        ##
@@ -421,7 +470,7 @@ class treeList:
       if not self.EMPTY:
          self.activeItem()
          returnValue=self.ACTIVEITEM[self.MLABEL]
-      return returnValue  
+      return returnValue 
 
 ######################################################################################
 ##  returns the active Index                                                        ##
@@ -430,8 +479,8 @@ class treeList:
       returnValue=-1
       if not self.EMPTY:
          returnValue=self.CURRELEMENT-self.MOFFSET
-      return returnValue  
-  
+      return returnValue 
+ 
 ######################################################################################
 ##  returns the active position related to its level                                ##
 ######################################################################################
@@ -439,7 +488,7 @@ class treeList:
       returnValue=''
       if not self.EMPTY:
          returnValue=str(self.CURRELEMENT-self.MOFFSET+1)+'/'+str(self.CURRENTLEVEL[self.MITEMS])
-      return returnValue  
+      return returnValue 
 
 ######################################################################################
 ##  return True if the active Item has sub items                                    ##
@@ -448,7 +497,7 @@ class treeList:
       returnValue = False
       if not self.EMPTY and self.typeOfActiveItem() == 'SubMenu': returnValue = True
       return returnValue
-     
+    
 ######################################################################################
 ##  returns number of items of current level                                        ##
 ######################################################################################
@@ -463,9 +512,16 @@ class treeList:
          returnValue = self.ACTIVEITEM[self.MITEMS]
       else:
          returnValue = 0
-        
+       
       return returnValue
 
+######################################################################################
+##  set current element active (only for internal use)                              ##
+######################################################################################
+   def setCommand2Current(self, cmd):
+      if not self.EMPTY:
+         self.ACTIVEITEM[self.MCOMMAND]=cmd
+        
 ######################################################################################
 ##  set current element active (only for internal use)                              ##
 ######################################################################################
@@ -489,7 +545,7 @@ class treeList:
          self.CURRELEMENT = self.MOFFSET
          self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
          self.setActiveOn()
-     
+    
 ######################################################################################
 ##  set active the item indicated by index relative to the current level            ##
 ######################################################################################
@@ -511,7 +567,7 @@ class treeList:
             if i[self.MLABEL] == itemName:
                self.CURRELEMENT = count + self.MOFFSET
             count += 1
-           
+          
          self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
          self.setActiveOn()
 
@@ -525,7 +581,7 @@ class treeList:
             self.CURRELEMENT += 1
          else:
             self.CURRELEMENT = self.MOFFSET
-     
+    
          self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
          self.setActiveOn()
 
@@ -539,9 +595,9 @@ class treeList:
            self.CURRELEMENT -= 1
          else:
             self.CURRELEMENT = (self.numberOfItems()+self.MOFFSET-1)
-     
+    
          self.ACTIVEITEM = self.CURRENTLEVEL[self.CURRELEMENT]
-         self.setActiveOff()
+         self.setActiveOn()
 
 ######################################################################################
 ##  go to the last entry in the current level and set active it active              ##
@@ -587,7 +643,7 @@ class treeList:
       if not self.EMPTY:
          returnValue=self.typeOfItem(self.ACTIVEITEM)
       return returnValue
-     
+    
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    def typeOfItem(self, item):
       returnType = ''
@@ -596,9 +652,10 @@ class treeList:
          if self.CURRENTLEVELTYPE > 0:
             returnType = 'SubMenu'
          elif self.CURRENTLEVELTYPE == 0:
-            returnType = 'Label'
-         elif self.CURRENTLEVELTYPE == -1:
-            returnType = 'Command'
+            if item[self.MCOMMAND] == self.EMPTYCMD:
+               returnType = 'Label'
+            else:  
+               returnType = 'Command'
  
       return returnType
 
@@ -619,7 +676,7 @@ class treeList:
          print 'END: DEBUG INFORMACION *******************************************************'
       else:
          print 'This list is empty'
-                 
+                
 ######################################################################################
 ##  returns a iterable of items that belongs to current list                        ##
 ######################################################################################
@@ -646,7 +703,7 @@ class treeList:
 ##  returns a iterable of subitems                                                  ##
 ######################################################################################
    def subItems(self):
-      temp=list()   
+      temp=list()  
       if not self.EMPTY:
          if self.typeOfActiveItem() == 'SubMenu':
             self.goDown()
@@ -654,7 +711,7 @@ class treeList:
             self.goUp()
 
       return iter(temp)
-     
+    
 ######################################################################################
 ##  load file names as items to itemName                                            ##
 ######################################################################################
@@ -664,7 +721,7 @@ class treeList:
             for e in ext:
                if filename.split('.')[-1] == e:
                   self.addItem(itemName,filename)
-         else:        
+         else:       
             self.addItem(itemName,filename)
 
 ######################################################################################
@@ -676,7 +733,7 @@ class treeList:
             for e in ext:
                if filename.split('.')[-1] == e:
                   self.addItem2Current(filename)
-         else:        
+         else:       
             self.addItem2Current(filename)
 
 ######################################################################################
@@ -693,10 +750,23 @@ class treeList:
       for dirname in [f for f  in sorted(os.listdir(path)) if os.path.isdir(os.path.join(path,f))]:
          self.addItem2Current(dirname)
 
-##################################################################################################################        
+######################################################################################
+##  run the procedure stored in item                                                ##
+######################################################################################
+   def run(self,itemName):
+      if not self.EMPTY:
+         self.savePosition()
+         if self.find(itemName):
+            self.command()()
+            self.restorePosition()
+
+def test():
+   print 'test executed'
+  
+##################################################################################################################       
 if __name__ == '__main__':
    menu = treeList()
-  
+ 
    menu.fillDummyItems()
-  
+
    menu.printList()
